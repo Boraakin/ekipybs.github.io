@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Yönetim | Giriş{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="auth card">
+      <div class="kicker">Yönetim Paneli</div>
+      <h1 class="h2">Giriş</h1>
+      <p class="muted">Demo kullanıcı: admin • şifre: 1234</p>
+
+      {% if error %}
+      <div class="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('admin_login_post') }}">
+        <div class="control">
+          <label class="label" for="username">Kullanıcı</label>
+          <input class="input" id="username" name="username" required />
+        </div>
+        <div class="control">
+          <label class="label" for="password">Şifre</label>
+          <input class="input" id="password" name="password" type="password" required />
+        </div>
+        <button class="btn w100" type="submit">Giriş</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

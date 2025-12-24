@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}Sanal Galeri | Galeri{% endblock %}
+{% block meta_desc %}Eserleri ara, kategori ve renk etiketi ile filtrele.{% endblock %}
+
+{% block content %}
+<section class="section tight">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1 class="h2" data-tr="Galeri" data-en="Gallery">Galeri</h1>
+        <div class="muted" data-tr="Arama • filtre • sıralama" data-en="Search • filter • sort">Arama • filtre • sıralama</div>
+      </div>
+      <a class="btn btn-ghost" href="{{ url_for('exhibition') }}" data-tr="Sergi" data-en="Exhibition">Sergi</a>
+    </div>
+
+    <div class="controls card">
+      <div class="control">
+        <label class="label" for="q" data-tr="Ara" data-en="Search">Ara</label>
+        <input id="q" class="input" data-placeholder-tr="Başlık ya da sanatçı" data-placeholder-en="Title or artist" placeholder="Başlık ya da sanatçı">
+      </div>
+
+      <div class="control">
+        <label class="label" for="cat" data-tr="Kategori" data-en="Category">Kategori</label>
+        <select id="cat" class="select">
+          <option value="">Tümü</option>
+          <option>Painting</option>
+          <option>Photography</option>
+          <option>Sculpture</option>
+          <option>Digital</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label class="label" for="tag" data-tr="Renk Etiketi" data-en="Color Tag">Renk Etiketi</label>
+        <select id="tag" class="select">
+          <option value="">Tümü</option>
+          <option>Monochrome</option>
+          <option>Warm</option>
+          <option>Cool</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label class="label" for="sort" data-tr="Sırala" data-en="Sort">Sırala</label>
+        <select id="sort" class="select">
+          <option value="year_desc" data-tr="Yıl (yeni → eski)" data-en="Year (new → old)">Yıl (yeni → eski)</option>
+          <option value="title_asc" data-tr="Başlık (A → Z)" data-en="Title (A → Z)">Başlık (A → Z)</option>
+        </select>
+      </div>
+
+      <div class="control">
+        <label class="label">&nbsp;</label>
+        <button id="clear" class="btn btn-ghost w100" data-tr="Temizle" data-en="Clear">Temizle</button>
+      </div>
+    </div>
+
+    <div class="grid" id="grid">
+      {% for a in artworks %}
+      <a class="art-card" href="{{ url_for('artwork_detail', art_id=a.id) }}"
+         data-title="{{ a.title|lower }}"
+         data-artist="{{ a.artist|lower }}"
+         data-category="{{ a.category }}"
+         data-tag="{{ a.color_tag }}"
+         data-year="{{ a.year }}"
+      >
+        <div class="art-img">
+          <img loading="lazy" src="{{ a.image_url }}" alt="{{ a.title }}">
+        </div>
+        <div class="art-meta">
+          <div class="art-title">{{ a.title }}</div>
+          <div class="art-sub muted">{{ a.artist }} • {{ a.year }} • {{ a.medium }}</div>
+          <div class="chips">
+            <span class="chip">{{ a.category }}</span>
+            <span class="chip chip-ghost">{{ a.color_tag }}</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    <div class="empty card" id="empty" style="display:none;">
+      <div class="h3">Sonuç bulunamadı</div>
+      <div class="muted">Arama/filtre seçeneklerini değiştir.</div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+{% endblock %}

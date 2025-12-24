@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}Sanal Galeri | Ana Sayfa{% endblock %}
+{% block meta_desc %}Koyu temalı, premium görünümlü sanal galeri proje sitesi.{% endblock %}
+
+{% block content %}
+<section class="hero hero-exhibit">
+  <canvas id="landing-hero" aria-hidden="true"></canvas>
+  <div class="container hero-grid">
+    <div class="hero-left">
+      <h1 class="h1" data-tr="Dijital Sergi Deneyimi" data-en="Digital Exhibition Experience">Dijital Sergi Deneyimi</h1>
+      <p class="lead" data-tr="Işık, doku ve ritim üzerinden ilerleyen seçki. Eserleri keşfet, detaylara yaklaş, küratöryel metni oku." data-en="A selection exploring light, texture and rhythm. Discover works, inspect details, read curatorial notes.">Işık, doku ve ritim üzerinden ilerleyen seçki. Eserleri keşfet, detaylara yaklaş, küratöryel metni oku.</p>
+      <div class="hero-cta">
+        <a class="btn" href="{{ url_for('gallery') }}" data-tr="Galeriyi Gez" data-en="Visit Gallery">Galeriyi Gez</a>
+        <a class="btn btn-ghost" href="{{ url_for('exhibition') }}" data-tr="Güncel Sergi" data-en="Current Exhibition">Güncel Sergi</a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-k">Eser</div>
+          <div class="stat-v">{{ featured|length }}+</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">Tema</div>
+          <div class="stat-v">Koyu</div>
+        </div>
+        <div class="stat">
+          <div class="stat-k">Yer</div>
+          <div class="stat-v">Ankara</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="card glass">
+        <div class="card-head">
+          <div>
+            <div class="kicker">Güncel Sergi</div>
+            <div class="title">{{ exhibition.title if exhibition else "Sergi" }}</div>
+            <div class="muted">{{ exhibition.date_range if exhibition else "" }}</div>
+          </div>
+          <a class="btn btn-small btn-ghost" href="{{ url_for('exhibition') }}">Aç</a>
+        </div>
+
+        <div class="cover">
+          <img loading="lazy" src="{{ exhibition.cover_image_url if exhibition else 'https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=1600&q=80' }}" alt="Sergi kapak">
+        </div>
+
+        <div class="card-body">
+          <p class="muted">
+            {{ exhibition.statement if exhibition else "Küratöryel metin örneği." }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <div class="curation-sub muted" data-tr="Bu seçki, serginin kavramsal omurgasını temsil eden ve izleyiciyle ilk teması kuran eserlerden oluşur." data-en="This selection represents the conceptual backbone of the exhibition and establishes the first dialogue with the viewer.">
+        Bu seçki, serginin kavramsal omurgasını temsil eden ve izleyiciyle ilk teması kuran eserlerden oluşur.
+      </div>
+      <h2 class="h2">Öne Çıkan Eserler</h2>
+      <div class="muted">Kaydır • tıkla • detay gör</div>
+    </div>
+
+    <div class="carousel" id="carousel">
+      <button class="car-btn" data-dir="-1" aria-label="Geri">‹</button>
+      <div class="car-track" id="carTrack" tabindex="0" aria-label="Öne çıkan eserler">
+        {% for a in featured %}
+        <a class="car-item" href="{{ url_for('artwork_detail', art_id=a.id) }}">
+          <img loading="lazy" src="{{ a.image_url }}" alt="{{ a.title }}">
+          <div class="car-meta">
+            <div class="car-title">{{ a.title }}</div>
+            <div class="car-sub muted">{{ a.artist }} • {{ a.year }}</div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      <button class="car-btn" data-dir="1" aria-label="İleri">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container grid-2">
+    <div class="card">
+      <div class="kicker">Sergi Notu</div>
+      <h3 class="h3">Yakından Bak</h3>
+      <p class="muted">
+        Galeri sayfasında arama, kategori ve renk etiketi ile seçkiyi hızlıca daralt. Eser detayında büyütme ile dokuyu incele.
+      </p>
+      <a class="btn btn-ghost" href="{{ url_for('gallery') }}">Galeriye Git</a>
+    </div>
+    <div class="card">
+      <div class="kicker">Sanatçı</div>
+      <h3 class="h3">Kısa Profil</h3>
+      <p class="muted">
+        Proje kapsamında örnek sanatçı profili. İstersen ad-soyad ve metni kendi bilgilerinle değiştir.
+      </p>
+      <a class="btn btn-ghost" href="{{ url_for('about') }}">Hakkında</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/landing_canvas.js') }}" defer></script>
+<script>
+  (function(){
+    const track = document.getElementById('carTrack');
+    const wrap = document.getElementById('carousel');
+    if(!track || !wrap) return;
+    wrap.querySelectorAll('.car-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const dir = parseInt(btn.dataset.dir, 10) || 1;
+        track.scrollBy({left: dir*420, behavior:'smooth'});
+      });
+    });
+  })();
+</script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% block title %}{{ art.title }} | Sanal Galeri{% endblock %}
+{% block meta_desc %}{{ art.title }} — {{ art.artist }}. Eser detayı ve büyütme.{% endblock %}
+
+{% block content %}
+<section class="section tight">
+  <div class="container">
+    <div class="breadcrumbs muted">
+      <a class="muted-link" href="{{ url_for('gallery') }}">Galeri</a> / <span>{{ art.title }}</span>
+    </div>
+
+    <div class="detail">
+      <div class="detail-media">
+        <button class="zoomable" id="zoomBtn" aria-label="Görseli büyüt">
+          <img src="{{ art.image_url }}" alt="{{ art.title }}">
+          <span class="zoom-hint">Büyüt</span>
+        </button>
+      </div>
+
+      <aside class="detail-info card">
+        <div class="kicker">{{ art.category }} • {{ art.color_tag }}</div>
+        <h1 class="h2">{{ art.title }}</h1>
+        <div class="muted">{{ art.artist }} • {{ art.year }}</div>
+
+        <div class="specs">
+          <div class="spec"><span>Teknik</span><b>{{ art.medium }}</b></div>
+          <div class="spec"><span>Ölçü</span><b>{{ art.dimensions }}</b></div>
+        </div>
+
+        <p class="muted">{{ art.description }}</p>
+
+        <div class="actions">
+          <a class="btn" href="{{ url_for('contact') }}">Bu eser için iletişim</a>
+          <button class="btn btn-ghost" type="button" id="shareBtn">Paylaş</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="section-head mt">
+      <h2 class="h3">Benzer Eserler</h2>
+      <div class="muted">Aynı kategori</div>
+    </div>
+
+    <div class="grid small">
+      {% for a in related %}
+      <a class="art-card" href="{{ url_for('artwork_detail', art_id=a.id) }}">
+        <div class="art-img">
+          <img loading="lazy" src="{{ a.image_url }}" alt="{{ a.title }}">
+        </div>
+        <div class="art-meta">
+          <div class="art-title">{{ a.title }}</div>
+          <div class="art-sub muted">{{ a.artist }} • {{ a.year }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lb-close" id="lbClose" aria-label="Kapat">×</button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Önceki">‹</button>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Sonraki">›</button>
+  <div class="lb-stage" id="lbStage">
+    <img id="lbImg" src="{{ art.image_url }}" alt="{{ art.title }}">
+  </div>
+  <div class="lb-caption">
+    <div class="lb-title">{{ art.title }}</div>
+    <div class="muted">{{ art.artist }} • {{ art.year }}</div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function(){
+    const lb = document.getElementById('lightbox');
+    const openBtn = document.getElementById('zoomBtn');
+    const closeBtn = document.getElementById('lbClose');
+    const img = document.getElementById('lbImg');
+    const stage = document.getElementById('lbStage');
+    const share = document.getElementById('shareBtn');
+
+    function open(){
+      lb.classList.add('open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('no-scroll');
+      img.style.transform = 'scale(1)';
+      img.dataset.scale = '1';
+    }
+    function close(){
+      lb.classList.remove('open');
+      lb.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('no-scroll');
+    }
+
+    openBtn?.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') close(); });
+
+    // basit zoom
+    stage?.addEventListener('click', ()=>{
+      const s = parseFloat(img.dataset.scale || '1');
+      const next = s >= 2 ? 1 : s + 0.5;
+      img.dataset.scale = String(next);
+      img.style.transform = `scale(${next})`;
+    });
+
+    share?.addEventListener('click', async ()=>{
+      const url = window.location.href;
+      try{
+        if(navigator.share){
+          await navigator.share({title: document.title, url});
+        }else{
+          await navigator.clipboard.writeText(url);
+          alert('Bağlantı panoya kopyalandı.');
+        }
+      }catch(_){}
+    });
+
+    // Next/Prev: benzerler üzerinden dolaşım yerine sadece kapalı (proje için yeterli)
+    document.getElementById('lbPrev')?.addEventListener('click', ()=>alert('Demo: aynı sayfada tek görsel.'));
+    document.getElementById('lbNext')?.addEventListener('click', ()=>alert('Demo: aynı sayfada tek görsel.'));
+  })();
+</script>
+{% endblock %}

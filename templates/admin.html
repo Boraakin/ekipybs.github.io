@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+{% block title %}Yönetim Paneli{% endblock %}
+
+{% block content %}
+<section class="section tight">
+  <div class="container">
+    <div class="admin-shell">
+      <aside class="admin-side card">
+        <div class="admin-brand">
+          <div class="brand-mark"></div>
+          <div>
+            <div class="title">Yönetim</div>
+            <div class="muted">CRUD + SQLite</div>
+          </div>
+        </div>
+
+  <button class="side-link active" data-view="dash">Özet</button>
+  <button class="side-link" data-view="artworks">Eserler</button>
+  <button class="side-link" data-view="exhibition">Sergi</button>
+  <button class="side-link" data-view="settings">Ayarlar</button>
+  <button class="side-link" data-view="data">Veri</button>
+
+        <form class="mt" method="post" action="{{ url_for('admin_logout') }}">
+          <button class="btn btn-ghost w100" type="submit">Çıkış</button>
+        </form>
+      </aside>
+
+      <div class="admin-main">
+        <div class="admin-top">
+          <h1 class="h2" id="adminTitle">Özet</h1>
+          <div class="muted" id="adminSub">Veri durumu ve hızlı metrikler</div>
+        </div>
+
+        <div id="view-dash" class="view card">
+          <div class="grid-3">
+            <div class="mini">
+              <div class="muted">Toplam eser</div>
+              <div class="big" id="kpiTotal">—</div>
+            </div>
+            <div class="mini">
+              <div class="muted">Öne çıkan</div>
+              <div class="big" id="kpiFeatured">—</div>
+            </div>
+            <div class="mini">
+              <div class="muted">Kategori</div>
+              <div class="big" id="kpiCats">—</div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="muted">Son işlem kaydı (demo)</div>
+          <div class="log" id="logBox"></div>
+        </div>
+
+        <div id="view-artworks" class="view card" style="display:none;">
+          <div class="toolbar">
+            <input class="input" id="aSearch" placeholder="Ara (başlık/sanatçı)">
+            <select class="select" id="aCat">
+              <option value="">Kategori (tümü)</option>
+              <option>Painting</option>
+              <option>Photography</option>
+              <option>Sculpture</option>
+              <option>Digital</option>
+            </select>
+            <button class="btn" id="newBtn">Yeni eser</button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="table" aria-label="Eser tablosu">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Başlık</th>
+                  <th>Sanatçı</th>
+                  <th>Yıl</th>
+                  <th>Kategori</th>
+                  <th>Öne</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="aRows"></tbody>
+            </table>
+          </div>
+
+          <div class="hr"></div>
+
+          <div class="form-head">
+            <div>
+              <div class="kicker" id="formMode">Yeni</div>
+              <div class="title" id="formTitle">Eser Kaydı</div>
+            </div>
+            <div class="muted" id="formHint">Alanları doldur ve kaydet.</div>
+          </div>
+
+          <form id="aForm" class="admin-form">
+            <input type="hidden" id="id" />
+
+            <div class="form-grid">
+              <div class="control">
+                <label class="label">Başlık</label>
+                <input class="input" id="title" required />
+              </div>
+              <div class="control">
+                <label class="label">Sanatçı</label>
+                <input class="input" id="artist" required />
+              </div>
+
+              <div class="control">
+                <label class="label">Yıl</label>
+                <input class="input" id="year" type="number" min="1500" max="2100" required />
+              </div>
+              <div class="control">
+                <label class="label">Teknik</label>
+                <input class="input" id="medium" required />
+              </div>
+
+              <div class="control">
+                <label class="label">Ölçü</label>
+                <input class="input" id="dimensions" required />
+              </div>
+
+              <div class="control">
+                <label class="label">Kategori</label>
+                <select class="select" id="category" required>
+                  <option>Painting</option>
+                  <option>Photography</option>
+                  <option>Sculpture</option>
+                  <option>Digital</option>
+                </select>
+              </div>
+
+              <div class="control">
+                <label class="label">Renk etiketi</label>
+                <select class="select" id="color_tag" required>
+                  <option>Monochrome</option>
+                  <option>Warm</option>
+                  <option>Cool</option>
+                </select>
+              </div>
+
+              <div class="control span-2">
+                <label class="label">Görsel URL</label>
+                <input class="input" id="image_url" placeholder="https://..." required />
+                <div class="preview" id="imgPrevWrap" style="display:none;">
+                  <img id="imgPrev" alt="Önizleme">
+                </div>
+              </div>
+
+              <div class="control span-2">
+                <label class="label">Açıklama</label>
+                <textarea class="textarea" id="description" required></textarea>
+              </div>
+
+              <div class="control">
+                <label class="label">Öne çıkar</label>
+                <label class="switch">
+                  <input type="checkbox" id="featured">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="btn" type="submit" id="saveBtn">Kaydet</button>
+              <button class="btn btn-ghost" type="button" id="resetBtn">Sıfırla</button>
+              <span class="muted" id="aStatus"></span>
+            </div>
+          </form>
+        </div>
+
+        <div id="view-settings" class="view card" style="display:none;">
+          <h2 class="h3">Ayarlar</h2>
+          <p class="muted">Bu bölüm demo amaçlıdır. Genel ayarlar burada görünür.</p>
+          <div class="hr"></div>
+          <div class="muted">Not: Şu an birçok veri aracı alt menüsünde bulunur.</div>
+        </div>
+
+        <div id="view-exhibition" class="view card" style="display:none;">
+          <h2 class="h3">Sergi Düzenleyici</h2>
+          <p class="muted">Küratöryel başlık, tarih aralığı, açıklama ve kapak görselini düzenleyin. Kaydettiğinizde site hemen güncellenecektir.</p>
+          <div class="hr"></div>
+          <form id="exForm">
+            <div class="form-grid">
+              <div class="control">
+                <label class="label">Başlık</label>
+                <input class="input" id="ex_title" required />
+              </div>
+              <div class="control">
+                <label class="label">Tarih Aralığı</label>
+                <input class="input" id="ex_date_range" placeholder="Dec 2025 – Jan 2026" />
+              </div>
+              <div class="control span-2">
+                <label class="label">Kapak Görseli URL</label>
+                <input class="input" id="ex_cover" placeholder="https://images.unsplash.com/..." />
+              </div>
+              <div class="control span-2">
+                <label class="label">Küratöryel Metin</label>
+                <textarea class="textarea" id="ex_statement"></textarea>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn" type="submit" id="exSave">Kaydet</button>
+              <button class="btn btn-ghost" type="button" id="exReset">Sıfırla</button>
+              <span class="muted" id="exStatus"></span>
+            </div>
+          </form>
+        </div>
+
+        <div id="view-data" class="view card" style="display:none;">
+          <h2 class="h3">Veri Araçları</h2>
+          <p class="muted">Tüm veriyi JSON olarak dışa aktarın veya JSON ile içe aktarın (mevcut veri üzerine yazılır).</p>
+          <div class="hr"></div>
+          <div class="grid-2">
+            <div>
+              <label class="label">Dışa Aktar</label>
+              <div class="actions">
+                <button class="btn" id="exportBtn">JSON Olarak İndir</button>
+                <span class="muted" id="exportStatus"></span>
+              </div>
+            </div>
+            <div>
+              <label class="label">İçe Aktar (JSON)</label>
+              <input type="file" id="importFile" accept="application/json" />
+              <div class="actions" style="margin-top:8px;">
+                <button class="btn btn-danger" id="importBtn">İçe Aktar ve Üzerine Yaz</button>
+                <span class="muted" id="importStatus"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

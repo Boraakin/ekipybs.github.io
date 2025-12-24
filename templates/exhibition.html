@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% block title %}Sanal Galeri | Sergi{% endblock %}
+{% block meta_desc %}Güncel sergi, küratöryel metin ve sanal gezinti.{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="ex-hero card">
+      <div class="ex-cover">
+        <img loading="lazy" src="{{ ex.cover_image_url if ex else 'https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=1600&q=80' }}" alt="Kapak">
+      </div>
+      <div class="ex-meta">
+        <div class="kicker">Güncel Sergi</div>
+        <h1 class="h2">{{ ex.title if ex else "Sergi" }}</h1>
+        <div class="muted">{{ ex.date_range if ex else "" }}</div>
+        <p class="muted mt-sm">{{ ex.statement if ex else "" }}</p>
+        <div class="hero-cta">
+          <a class="btn" href="{{ url_for('gallery') }}">Eserleri Gör</a>
+          <a class="btn btn-ghost" href="#walk">Sanal Gezi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="walk">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="h3">Sanal Gezi</h2>
+      <div class="muted">Yatay kaydır — oda geçişi hissi</div>
+    </div>
+    <div class="walk">
+      <div class="rooms-accordion" id="roomsAccordion">
+        <!-- Five rooms: data-tr / data-en labels set on buttons -->
+        <div class="room card room-entrance">
+          <button class="room-header" aria-expanded="false" aria-controls="panel-1" id="room-1" data-tr="Giriş Holü" data-en="Entrance Hall">
+            <div>
+              <div class="kicker">1</div>
+              <div class="room-title">Giriş Holü</div>
+            </div>
+            <div class="room-meta muted">Kısa tanıtım • karşılama</div>
+          </button>
+          <div class="room-panel" id="panel-1" role="region" aria-labelledby="room-1">
+            <div class="room-accent"></div>
+            <div class="room-desc" data-tr="Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder." data-en="This room invites the viewer into the conceptual threshold of the exhibition.">Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder.</div>
+            <div class="room-content" data-room="entrance"></div>
+          </div>
+        </div>
+
+        <div class="room card room-light">
+          <button class="room-header" aria-expanded="false" aria-controls="panel-2" id="room-2" data-tr="Işık Odası" data-en="Light Room">
+            <div>
+              <div class="kicker">2</div>
+              <div class="room-title">Işık Odası</div>
+            </div>
+            <div class="room-meta muted">Fotoğraf & aydınlatma odası</div>
+          </button>
+          <div class="room-panel" id="panel-2" role="region" aria-labelledby="room-2">
+            <div class="room-accent"></div>
+            <div class="room-desc" data-tr="Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder." data-en="This room invites the viewer into the conceptual threshold of the exhibition.">Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder.</div>
+            <div class="room-content" data-room="light"></div>
+          </div>
+        </div>
+
+        <div class="room card room-texture">
+          <button class="room-header" aria-expanded="false" aria-controls="panel-3" id="room-3" data-tr="Doku Galerisi" data-en="Texture Gallery">
+            <div>
+              <div class="kicker">3</div>
+              <div class="room-title">Doku Galerisi</div>
+            </div>
+            <div class="room-meta muted">Heykel ve yüzey çalışmaları</div>
+          </button>
+          <div class="room-panel" id="panel-3" role="region" aria-labelledby="room-3">
+            <div class="room-accent"></div>
+            <div class="room-desc" data-tr="Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder." data-en="This room invites the viewer into the conceptual threshold of the exhibition.">Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder.</div>
+            <div class="room-content" data-room="texture"></div>
+          </div>
+        </div>
+
+        <div class="room card room-rhythm">
+          <button class="room-header" aria-expanded="false" aria-controls="panel-4" id="room-4" data-tr="Ritim Koridoru" data-en="Rhythm Corridor">
+            <div>
+              <div class="kicker">4</div>
+              <div class="room-title">Ritim Koridoru</div>
+            </div>
+            <div class="room-meta muted">Dijital ritimler ve hareket</div>
+          </button>
+          <div class="room-panel" id="panel-4" role="region" aria-labelledby="room-4">
+            <div class="room-accent"></div>
+            <div class="room-desc" data-tr="Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder." data-en="This room invites the viewer into the conceptual threshold of the exhibition.">Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder.</div>
+            <div class="room-content" data-room="rhythm"></div>
+          </div>
+        </div>
+
+        <div class="room card room-final">
+          <button class="room-header" aria-expanded="false" aria-controls="panel-5" id="room-5" data-tr="Final Seçkisi" data-en="Final Selection">
+            <div>
+              <div class="kicker">5</div>
+              <div class="room-title">Final Seçkisi</div>
+            </div>
+            <div class="room-meta muted">Küratöryel kapanış seçkisi</div>
+          </button>
+          <div class="room-panel" id="panel-5" role="region" aria-labelledby="room-5">
+            <div class="room-accent"></div>
+            <div class="room-desc" data-tr="Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder." data-en="This room invites the viewer into the conceptual threshold of the exhibition.">Bu oda, izleyiciyi serginin kavramsal eşiğine davet eder.</div>
+            <div class="room-content" data-room="final"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="h3">Bu Sergide Öne Çıkanlar</h2>
+      <div class="muted">Seçili eserler</div>
+    </div>
+
+    <div class="grid small">
+      {% for a in featured %}
+      <a class="art-card" href="{{ url_for('artwork_detail', art_id=a.id) }}">
+        <div class="art-img">
+          <img loading="lazy" src="{{ a.image_url }}" alt="{{ a.title }}">
+        </div>
+        <div class="art-meta">
+          <div class="art-title">{{ a.title }}</div>
+          <div class="art-sub muted">{{ a.artist }} • {{ a.year }}</div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/exhibition_rooms.js') }}" defer></script>
+{% endblock %}

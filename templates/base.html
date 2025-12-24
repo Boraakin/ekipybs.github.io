@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}DigiTuval{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}Koyu temalı DigiTuval proje sitesi.{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}DigiTuval{% endblock %}">
+  <meta property="og:description" content="{% block og_desc %}Koyu temalı DigiTuval proje sitesi.{% endblock %}">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+  <div class="bg-noise"></div>
+
+  <header class="header" id="siteHeader">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('index') }}">
+        <span class="brand-mark"></span>
+        <span class="brand-text">DigiTuval</span>
+      </a>
+
+      <nav class="nav">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.path=='/' %}active{% endif %}" data-tr="Ana" data-en="Home">Ana</a>
+        <a href="{{ url_for('gallery') }}" class="nav-link {% if request.path.startswith('/gallery') %}active{% endif %}" data-tr="Galeri" data-en="Gallery">Galeri</a>
+        <a href="{{ url_for('exhibition') }}" class="nav-link {% if request.path.startswith('/exhibition') %}active{% endif %}" data-tr="Sergi" data-en="Exhibition">Sergi</a>
+        <a href="{{ url_for('about') }}" class="nav-link {% if request.path.startswith('/about') %}active{% endif %}" data-tr="Hakkında" data-en="About">Hakkında</a>
+        <a href="{{ url_for('contact') }}" class="nav-link {% if request.path.startswith('/contact') %}active{% endif %}" data-tr="İletişim" data-en="Contact">İletişim</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="btn btn-ghost" href="{{ url_for('admin_panel') }}" data-tr="Yönetim" data-en="Admin">Yönetim</a>
+        <div class="lang-toggle" aria-hidden="false">
+          <button class="btn btn-ghost" id="lang-tr" data-lang="tr">TR</button>
+          <button class="btn btn-ghost" id="lang-en" data-lang="en">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+  <div class="muted">© {{ 2025 }} DigiTuval — Üniversite Projesi</div>
+      <div class="footer-links">
+        <a href="#" class="muted-link">Instagram</a>
+        <a href="#" class="muted-link">Behance</a>
+        <a href="#" class="muted-link">E-posta</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // header küçülme
+    (function(){
+      const h = document.getElementById('siteHeader');
+      let last = 0;
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY || 0;
+        if (y > 20) h.classList.add('scrolled'); else h.classList.remove('scrolled');
+        last = y;
+      }, {passive:true});
+    })();
+  </script>
+
+  <script src="{{ url_for('static', filename='js/i18n.js') }}" defer></script>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

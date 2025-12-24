@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Sanal Galeri | Hakkında{% endblock %}
+{% block meta_desc %}Proje konsepti, vizyon, misyon, küratöryel yaklaşım ve SSS.{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1 class="h2">Hakkında</h1>
+        <div class="muted">Konsept • ekip • SSS</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="kicker">Konsept</div>
+        <h3 class="h3">Koyu, sakin, odaklı</h3>
+        <p class="muted">
+          Bu proje, dijital sergi deneyimini sade bir dil ile sunar: hızlı gezinme, güçlü tipografi, net hiyerarşi.
+        </p>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip chip-ghost">SQLite</span>
+          <span class="chip chip-ghost">Statik arayüz</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="card">
+          <div class="kicker">Vizyonumuz</div>
+          <h3 class="h3">Dijital sergi için akademik çerçeve</h3>
+          <p class="muted">
+            DigiTuval, çağdaş üretimin sergilenmesine ilişkin deneysel bir platform sunmayı amaçlar. Vizyonumuz, görsel malzemenin
+            sergileme bağlamını netleştiren ve izleyicinin dikkatini yönlendiren disiplinlerarası yaklaşımları desteklemektir.
+          </p>
+        </div>
+
+        <div class="card mt">
+          <div class="kicker">Misyonumuz</div>
+          <h3 class="h3">Erişilebilir, şeffaf ve tekrarlanabilir sunum</h3>
+          <p class="muted">
+            Misyonumuz; eser verilerini, küratöryel metni ve görsel sunumu açık biçimde birleştirerek eğitimsel kullanıma uygun
+            bir kaynak oluşturmaktır. Tasarım kararları minimal ve belgeleyici olacak şekilde alınmıştır.
+          </p>
+        </div>
+
+        <div class="card mt">
+          <div class="kicker">Küratöryel Yaklaşım</div>
+          <h3 class="h3">Selektif ve tematik okuma</h3>
+          <p class="muted">
+            Küratöryel yaklaşımımız tematik seçkiye dayanır: ışık, doku ve ritim gibi kavramsal eksenler etrafında eserler
+            gruplanır. Amaç, etkileşimi sınırlı öğelerle derinleştirmek ve izleyicinin analitik okumalarını teşvik etmektir.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head mt">
+      <h2 class="h3">SSS</h2>
+      <div class="muted">Açılır kapanır</div>
+    </div>
+
+    <div class="accordion" id="faq">
+      <button class="acc-item" aria-expanded="false">
+        <span>Veriler nerede tutuluyor?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Veriler lokal SQLite veritabanında saklanır ve yönetim arayüzü aracılığıyla güncellenir.
+      </div>
+
+      <button class="acc-item" aria-expanded="false">
+        <span>Yönetim paneli güvenli mi?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Bu bir proje demosudur; basit bir oturum mekanizması kullanılmıştır. Üretim ortamı için ek kimlik doğrulama
+        ve yetkilendirme önlemleri önerilir.
+      </div>
+
+      <button class="acc-item" aria-expanded="false">
+        <span>Görseller nasıl ekleniyor?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Eser görselleri yönetim paneline URL olarak eklenir; sistem bir önizleme sağlar.
+      </div>
+
+      <button class="acc-item" aria-expanded="false">
+        <span>Arama ve filtre nasıl çalışıyor?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Galeri sayfasında arama ve filtreleme tarayıcı içinde gerçekleştirilir; bu, etkileşimi hızlı kılar.
+      </div>
+
+      <button class="acc-item" aria-expanded="false">
+        <span>Site yayımlanabilir mi?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Uygulama yerel olarak çalışır; sunucuda yayınlamak için standart bir Python barındırma ortamına dağıtılması gerekir.
+      </div>
+
+      <button class="acc-item" aria-expanded="false">
+        <span>Hangi sayfalar var?</span>
+        <span class="acc-icon">+</span>
+      </button>
+      <div class="acc-panel muted">
+        Mevcut sayfalar: Ana, Galeri, Eser Detay, Sergi, Hakkında, İletişim ve Yönetim.
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function(){
+    const items = Array.from(document.querySelectorAll('#faq .acc-item'));
+    items.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        items.forEach(b=>{
+          b.setAttribute('aria-expanded','false');
+          b.nextElementSibling.style.maxHeight = null;
+        });
+        if(!expanded){
+          btn.setAttribute('aria-expanded','true');
+          const panel = btn.nextElementSibling;
+          panel.style.maxHeight = panel.scrollHeight + 'px';
+        }
+      });
+    });
+  })();
+</script>
+{% endblock %}

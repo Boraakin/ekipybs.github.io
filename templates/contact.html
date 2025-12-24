@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Sanal Galeri | İletişim{% endblock %}
+{% block meta_desc %}İletişim formu (doğrulama + başarı durumu).{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="page-head">
+      <div>
+        <h1 class="h2">İletişim</h1>
+        <div class="muted">Form doğrulama + başarı mesajı</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <form id="contactForm">
+          <div class="form-grid">
+            <div class="control">
+              <label class="label" for="name">Ad Soyad</label>
+              <input class="input" id="name" required minlength="2" />
+            </div>
+            <div class="control">
+              <label class="label" for="email">E-posta</label>
+              <input class="input" id="email" type="email" required />
+            </div>
+            <div class="control span-2">
+              <label class="label" for="subject">Konu</label>
+              <input class="input" id="subject" required minlength="3" />
+            </div>
+            <div class="control span-2">
+              <label class="label" for="msg">Mesaj</label>
+              <textarea class="textarea" id="msg" required minlength="10"></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn" type="submit">Gönder</button>
+            <span class="muted" id="status"></span>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="kicker">Konum</div>
+        <h3 class="h3">Ankara, Türkiye</h3>
+        <p class="muted">Harita yer tutucu (proje).</p>
+        <div class="map">
+          <div class="map-pin"></div>
+          <div class="muted">Harita</div>
+        </div>
+        <div class="muted mt-sm">E-posta: info@example.com</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function(){
+    const form = document.getElementById('contactForm');
+    const status = document.getElementById('status');
+    form?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      status.textContent = 'Gönderiliyor...';
+      setTimeout(()=>{
+        status.textContent = 'Gönderildi (demo).';
+        form.reset();
+      }, 700);
+    });
+  })();
+</script>
+{% endblock %}
